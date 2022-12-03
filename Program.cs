@@ -1,16 +1,19 @@
 ﻿using Spectre.Console;
-using System;
-using System.Diagnostics.Metrics;
-using System.Runtime.InteropServices;
+using System.Threading;
 
-namespace Top_Typing
+namespace Hz
 {
     internal class Program
     {
         static int i = 0;
-        //private static int count;
+        static int count = -1;
+        private static int tscore = 0;
+        private static int fscore = 0;
+
         static void Main()
         {
+            //Thread thread = new Thread(new ThreadStart());
+            //thread.Start();
             Console.CursorVisible = false;
             string txt = "Вот тут текст короче для тестов ";
             //string txt = "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь?";
@@ -19,6 +22,14 @@ namespace Top_Typing
 
             for (int i = 0; i < (count); i++)
             {
+                Console.SetCursorPosition(37, 12);
+                Console.WriteLine("-------------------------------------------");
+                Console.SetCursorPosition(37, 13);
+                Console.WriteLine("|");
+                Console.SetCursorPosition(37, 14);
+                Console.WriteLine("-------------------------------------------");
+                Console.SetCursorPosition(79, 13);
+                Console.WriteLine("|");
                 Console.SetCursorPosition(38, 13);
                 Write(text);
             }
@@ -38,13 +49,10 @@ namespace Top_Typing
                 }
             }
 
-            text.RemoveAt(0);
+
             Console.WriteLine();
-            /*if (i == count)
-            {
-                Environment.Exit(0);
-            }*/
             IsItRight(text);
+            text.RemoveAt(0);
         }
 
         private static void IsItRight(List<char> text)
@@ -53,8 +61,27 @@ namespace Top_Typing
             while (key.KeyChar != text[i])
             {
                 key = Console.ReadKey(true);
+                fscore += 1;
             }
-            //Write(text);
+
+            tscore += 1;
+            if (i == count)   //Вот это должен быть индикатор конца текста, но это хрень какая-то, если что
+            {
+                Console.WriteLine("ВСЁ!");
+            }
+        }
+
+        private static void Panel()
+        {
+            AnsiConsole.Write(new BreakdownChart()
+                .Width(60)
+                .AddItem("", fscore, Color.Red)
+                .AddItem("", tscore, Color.Green));
+        }
+
+        private static void Timer()
+        {
+
         }
     }
 }
